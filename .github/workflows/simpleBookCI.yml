@@ -4,6 +4,9 @@ on: push
 
 env: 
   BASED_URI: 'https://simple-books-api.glitch.me'
+  POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+  POSTMAN_COLLECTION_UID: '19276184-120be920-70dc-40f0-8bf1-9c660ac7e49a'
+  POSTMAN_ENVIRONMENT_UID: '19276184-5864a657-2c05-4010-a4f6-8484eff6965b'
 
 jobs:
   automated-api-tests:
@@ -21,10 +24,17 @@ jobs:
         run: |
           npm install -g newman-reporter-html
       - name: Run API tests
+      - name: Fetch Postman collection
         run: |
-          newman run "https://winter-star-126497.postman.co/workspace/CI~e58e311d-c3f1-4844-b084-317c929fbf3d/collection/19276184-120be920-70dc-40f0-8bf1-9c660ac7e49a" --reporters cli,html --reporter-html-export "report.html" --insecure
-        env:
-          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+          curl -X GET "https://api.getpostman.com/collections/${POSTMAN_COLLECTION_UID}" \
+            -H "X-Api-Key: ${POSTMAN_API_KEY}" > collection.json
+      - name: Fetch Postman environment
+        run: |
+          curl -X GET "https://api.getpostman.com/environments/${POSTMAN_ENVIRONMENT_UID}" \
+            -H "X-Api-Key: ${POSTMAN_API_KEY}" > environment.json
+      - name: Run API tests
+        run: |
+          newman run collection.json --environment environment.json
       - name: Upload report
         uses: actions/upload-artifact@v2
         with:
