@@ -13,11 +13,21 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v3
-      - name: Install Postman CLI
+      - name: Install Node.js
         run: |
-          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-      - name: Login to Postman CLI
-        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          nvm install node
+      - name: Install Newman
+        run: |
+          npm install -g newman
+      - name: Install Newman reporter
+        run: |
+          npm install -g newman-reporter-html
       - name: Run API tests
         run: |
-          postman collection run "19276184-120be920-70dc-40f0-8bf1-9c660ac7e49a" -e "19276184-5864a657-2c05-4010-a4f6-8484eff6965b"
+          newman run "https://winter-star-126497.postman.co/workspace/CI~e58e311d-c3f1-4844-b084-317c929fbf3d/collection/19276184-120be920-70dc-40f0-8bf1-9c660ac7e49a" --reporters cli,html --reporter-html-export "report.html"
+      - name: Upload report
+        uses: actions/upload-artifact@v2
+        with:
+          name: report
+          path: report.html
