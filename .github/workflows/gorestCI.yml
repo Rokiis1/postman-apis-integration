@@ -1,6 +1,8 @@
 name: Automated API tests using Postman CLI GorestAPI
 
-on: push
+on:
+  schedule:
+    - cron: '*/5 * * * *'
 
 env: 
   BASED_URI: 'https://gorest.co.in/'
