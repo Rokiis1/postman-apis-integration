@@ -8,12 +8,15 @@ env:
 jobs:
   automated-api-tests:
     runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Node.js
-        run: |
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-          nvm install node
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.x'
       - name: Install Newman
         run: |
           npm install -g newman
