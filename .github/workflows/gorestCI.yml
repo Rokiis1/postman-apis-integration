@@ -1,0 +1,21 @@
+name: Automated API tests using Postman CLI GorestAPI
+
+on: push
+
+env: 
+  BASED_URI: 'https://gorest.co.in/'
+  GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
+
+jobs:
+  automated-api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Run API tests
+        run: |
+          postman collection run "19276184-e2aa63f4-9b7b-43bd-b743-e373c7a95408" -e "19276184-3a46a084-7dd1-42c6-8557-d861350a839f"
