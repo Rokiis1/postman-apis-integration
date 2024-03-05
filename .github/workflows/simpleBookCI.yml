@@ -22,7 +22,9 @@ jobs:
           npm install -g newman-reporter-html
       - name: Run API tests
         run: |
-          newman run "https://winter-star-126497.postman.co/workspace/CI~e58e311d-c3f1-4844-b084-317c929fbf3d/collection/19276184-120be920-70dc-40f0-8bf1-9c660ac7e49a" --reporters cli,html --reporter-html-export "report.html"
+          newman run "https://winter-star-126497.postman.co/workspace/CI~e58e311d-c3f1-4844-b084-317c929fbf3d/collection/19276184-120be920-70dc-40f0-8bf1-9c660ac7e49a" --reporters cli,html --reporter-html-export "report.html" --insecure
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
       - name: Upload report
         uses: actions/upload-artifact@v2
         with:
