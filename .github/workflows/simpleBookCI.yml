@@ -38,7 +38,7 @@ jobs:
         shell: bash
       - name: Run API tests
         run: |
-          newman run collection.json --environment environment.json --reporters cli,html --reporter-html-export "report.html"
+          newman run collection.json --environment environment.json --reporters cli,html --reporter-html-export "./report.html"
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
