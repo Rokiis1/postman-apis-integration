@@ -30,10 +30,12 @@ jobs:
         run: |
           curl -X GET "https://api.getpostman.com/collections/${POSTMAN_COLLECTION_UID}" \
             -H "X-Api-Key: ${POSTMAN_API_KEY}" > collection.json
+        shell: bash
       - name: Fetch Postman environment
         run: |
           curl -X GET "https://api.getpostman.com/environments/${POSTMAN_ENVIRONMENT_UID}" \
             -H "X-Api-Key: ${POSTMAN_API_KEY}" > environment.json
+        shell: bash
       - name: Run API tests
         run: |
           newman run collection.json --environment environment.json --reporters cli,html --reporter-html-export "report.html"
